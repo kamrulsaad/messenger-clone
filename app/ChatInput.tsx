@@ -1,21 +1,53 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { v4 as uuid } from "uuid";
+import { Message } from "../typings";
 
 function ChatInput() {
   const [input, setInput] = useState("");
 
   const addMessage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(!input) return;
+    if (!input) return;
 
-    const message = input;
+    const text = input;
 
-    setInput("")
-  }
+    const id = uuid();
+
+    const message: Message = {
+      id,
+      message: text,
+      created_at: Date.now(),
+      username: "Elon Musk",
+      profilePic:
+        "https://th.bing.com/th/id/OIP.jryuUgIHWL-1FVD2ww8oWgHaHa?pid=ImgDet&rs=1",
+      email: "papareact.team@gmail.com",
+    };
+
+    const uploadMessageToUpstash = async () => {
+        const res = await fetch("/api/addMessage", {
+            method: "POST",
+            headers: {
+                "Content-Type" : "application/json",
+            },
+            body: JSON.stringify({message})
+        })
+
+        const data = await res.json()
+        console.log("message added ", data)
+    }
+
+    uploadMessageToUpstash()
+
+    setInput("");
+  };
 
   return (
-    <form onSubmit={addMessage} className="flex w-full px-10 py-5 space-x-2 border-t border-gray-100 fixed bottom-0 z-50">
+    <form
+      onSubmit={addMessage}
+      className="flex w-full px-10 py-5 space-x-2 border-t border-gray-100 fixed bottom-0 z-50"
+    >
       <input
         onChange={(e) => setInput(e.target.value)}
         type="text"
