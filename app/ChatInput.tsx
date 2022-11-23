@@ -51,7 +51,7 @@ function ChatInput() {
   return (
     <form
       onSubmit={addMessage}
-      className="flex w-full px-10 py-5 space-x-2 border-t border-gray-100 fixed bottom-0 z-50"
+      className="flex w-full px-10 py-5 space-x-2 border-t bg-white  border-gray-100 fixed bottom-0 z-50"
     >
       <input
         onChange={(e) => setInput(e.target.value)}
