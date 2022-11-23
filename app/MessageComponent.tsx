@@ -15,7 +15,7 @@ function MessageComponent({ message }: Props) {
     <div className={`flex w-fit ${isUser && "ml-auto"}`}>
       <div className={`flex-shrink-0 ${isUser && "order-2"}`}>
         <Image
-          src={message.profilePic}
+          src={message?.profilePic}
           className="rounded-full mx-2"
           height={10}
           width={50}

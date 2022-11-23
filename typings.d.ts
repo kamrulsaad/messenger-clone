@@ -1,8 +1,8 @@
 export type Message = {
-  id: String;
-  message: String;
+  id: string;
+  message: string;
   created_at: number;
-  username: String;
-  profilePic: String;
-  email: String;
+  username: string;
+  profilePic: string;
+  email: string;
 };
