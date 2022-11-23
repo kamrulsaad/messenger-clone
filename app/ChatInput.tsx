@@ -5,14 +5,19 @@ import { v4 as uuid } from "uuid";
 import { Message } from "../typings";
 import useSWR from "swr";
 import fetcher from "../utils/fetchMessages";
+import {unstable_getServerSession} from 'next-auth/next'
 
-function ChatInput() {
+type Props = {
+  session : Awaited<ReturnType<typeof unstable_getServerSession>>
+}
+
+function ChatInput({session} : Props) {
   const [input, setInput] = useState("");
   const { data: messages, error, mutate } = useSWR("/api/getMessages", fetcher);
 
   const addMessage = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!input) return;
+    if (!input || !session) return;
 
     const text = input;
 
@@ -22,10 +27,10 @@ function ChatInput() {
       id,
       message: text,
       created_at: Date.now(),
-      username: "Elon Musk",
+      username: session?.user?.name!,
       profilePic:
-        "https://th.bing.com/th/id/OIP.jryuUgIHWL-1FVD2ww8oWgHaHa?pid=ImgDet&rs=1",
-      email: "papareact.team@gmail.com",
+        session?.user?.image!,
+      email: session?.user?.email!,
     };
 
     const uploadMessageToUpstash = async () => {
@@ -55,6 +60,7 @@ function ChatInput() {
     >
       <input
         onChange={(e) => setInput(e.target.value)}
+        disabled={!session}
         type="text"
         className="flex-1 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent px-5 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
         placeholder="Enter Message"

@@ -7,7 +7,7 @@ async function SignInPage() {
 
   return (
     <div>
-      <div>
+      <div className="grid justify-center">
         <Image
           className="rounded-full mx-2 object-cover"
           width={700}
